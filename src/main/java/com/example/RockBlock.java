@@ -2,14 +2,13 @@ package com.example;
 
 import java.util.Random;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 public class RockBlock extends Block {
 
-    public RockBlock(int x, int y, double height, double width) {
-        super(x, y, height, width);
+    public RockBlock(int x, int y, double height, double width, Image image) {
+        super(x, y, height, width, image);
         super.setStabilityFactor(new Random().nextInt(51) + 25);
     }
     @Override
@@ -21,13 +20,8 @@ public class RockBlock extends Block {
         return super.getY();
     }
     @Override
-    public Rectangle getBlockInfo() {
+    public ImageView getBlockInfo() {
         return super.getBlockInfo();
-    }
-
-    @Override
-    public void blockColor() {
-        getBlockInfo().setFill(Color.GRAY);
     }
 
     @Override

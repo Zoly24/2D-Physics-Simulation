@@ -2,43 +2,19 @@ package com.example;
 
 import java.util.Random;
 
-import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
 
-public class Gravity {
+public class Gravity{
 
     private static final int DOWN = 0, LEFT = 1, RIGHT = 2;
 
-    public static void gravitySimulation(Pane pane, Block[][] grid) {
-        AnimationTimer timer = new AnimationTimer() {
-            private long lastUpdate = 0;
-            private final long FRAME_DELAY = 10000000;
-
-            @Override
-            public void handle(long now) {
-                if (lastUpdate == 0) {
-                    lastUpdate = now;
-                    return;
-                }
-
-                if (now - lastUpdate >= FRAME_DELAY) {
-                    double deltaTime = ((double) now - lastUpdate) / 100000.0;
-                    lastUpdate = now;
-
-                    updateGravity(pane, grid, deltaTime);
-                }
-            }
-        };
-
-        timer.start();
-    }
-
-    public static void updateGravity(Pane pane, Block[][] grid, double deltaTime) {
+    public static void updateGravity(Pane pane, Block[][] grid, long deltaTime) {
         for (int i = 0; i < Physics2D.GRID_SIZEX; i++) {
             for (int j = Physics2D.GRID_SIZEY - 1; j >= 0; j--) {
+                if(grid[i][j] == null){
+                    continue;
+                }
                 Block currentBlock = grid[i][j];
-                
                 
                 if (currentBlock != null &&
                     currentBlock.isAffectedByGravity() &&
@@ -109,14 +85,13 @@ public class Gravity {
     }
 
     public static void updateVisualsGravity(Pane pane, Block[][] grid) {
-        pane.getChildren().removeIf(filter -> filter instanceof Rectangle);
-
         for (int i = 0; i < Physics2D.GRID_SIZEX; i++) {
             for (int j = 0; j < Physics2D.GRID_SIZEY; j++) {
                 Block currentBlock = grid[i][j];
                 if (currentBlock != null) {
-                    currentBlock.blockColor();
-                    pane.getChildren().add(currentBlock.getBlockInfo());
+                    if (!pane.getChildren().contains(currentBlock.getBlockInfo())) {
+                        pane.getChildren().add(currentBlock.getBlockInfo());
+                    }
                 }
             }
         }

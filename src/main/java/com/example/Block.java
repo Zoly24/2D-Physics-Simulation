@@ -2,21 +2,28 @@ package com.example;
 
 import java.util.Random;
 
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public abstract class Block {
 
     private double x;
     private double y;
-    private final Rectangle square;
-    private double gravity = 98;
+    private final ImageView ImageView;
+    private double gravity = 30;
     private double elapsedTime;
     private int stabilityFactor;
 
-    public Block(int x, int y, double width, double height) {
+    public Block(int x, int y, double width, double height, Image image) {
         this.x = x;
         this.y = y;
-        this.square = new Rectangle(x, y, width, height);
+
+        this.ImageView = new ImageView(image);
+        this.ImageView.setX(x);
+        this.ImageView.setY(y);
+        this.ImageView.setFitWidth(width);
+        this.ImageView.setFitHeight(height);
+
         this.elapsedTime = 0;
         this.stabilityFactor = new Random().nextInt(99) + 1;
     }
@@ -31,12 +38,12 @@ public abstract class Block {
 
     public void setX(double x) {
         this.x = x;
-        this.square.setX(x);
+        this.ImageView.setX(x);
     }
 
     public void setY(double y) {
         this.y = y;
-        this.square.setY(y);
+        this.ImageView.setY(y);
     }
 
     public void setGravity(double gravity) {
@@ -71,17 +78,15 @@ public abstract class Block {
         this.elapsedTime = elapsedTime;
     }
 
-    public Rectangle getBlockInfo() {
-        return this.square;
+    public ImageView getBlockInfo() {
+        return this.ImageView;
     }
 
     public void placeBlock(int x, int y) {
         this.x = x;
         this.y = y;
-        this.square.setX(x);
-        this.square.setY(y);
+        this.ImageView.setX(x);
+        this.ImageView.setY(y);
     }
-
-    public abstract void blockColor();
 }
 

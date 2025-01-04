@@ -1,7 +1,12 @@
 package com.example;
 
+import java.util.EnumMap;
+import java.util.Map;
+
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -18,9 +23,6 @@ import javafx.stage.Stage;
  * -Add Water Physics
  * -Add TNT
  * --Add TNT Explosion
- * -Fix performance issues
- * 
- * -POSSIBLY MAKE GIT REPO FOR PROJECT???
  * 
  */
 public class Physics2D extends Application {
@@ -50,6 +52,7 @@ public class Physics2D extends Application {
     }
 
     public static Material currentMaterial = Material.SAND;
+    private static final Map<Material, Image> materialImages = new EnumMap<>(Material.class);
     public static int cursorSize = 0;
 
     public static void main(String[] args) {
@@ -58,6 +61,8 @@ public class Physics2D extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        loadMaterialImage();
 
         Pane root = new Pane();
         Scene scene = new Scene(root, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -72,7 +77,21 @@ public class Physics2D extends Application {
         createGrid(root);
         Keybinding.keyEvents(scene, root, grid);
         MouseHandler.mousePressedEvents(root, grid);
-        Gravity.gravitySimulation(root, grid);
+        Gravity.updateVisualsGravity(root, grid);
+        AnimationTimer timer = new AnimationTimer() {
+            private long lastTime = 0;
+
+            @Override
+            public void handle(long now) {
+                if(now - lastTime > 16666666) {
+
+                    Gravity.updateGravity(root, grid, now / 1000000 - lastTime / 1000000);
+                    System.out.println("lastTime : " + lastTime);
+                    lastTime = now;
+                }
+            }
+        };
+        timer.start();
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Physics 2D");
@@ -102,122 +121,137 @@ public class Physics2D extends Application {
         }
     }
 
-    public static void mouseEvents(Pane pane, Block[][] grid, double mouseX, double mouseY, int mouseButton) {
-        if (mouseButton == 0) {
-            int gridLocationX = (int) (mouseX / (SCREEN_WIDTH / GRID_SIZEX));
-            int gridLocationY = (int) (mouseY / (SCREEN_HEIGHT / GRID_SIZEY));
-
-            addBlocks(pane, grid, gridLocationX, gridLocationY, mouseX, mouseY);
-        } else if (mouseButton == 1) {
-            int gridLocationX = (int) (mouseX / (SCREEN_WIDTH / GRID_SIZEX));
-            int gridLocationY = (int) (mouseY / (SCREEN_HEIGHT / GRID_SIZEY));
-
-            deleteBlocks(pane, grid, gridLocationX, gridLocationY);
-            
-        }
-
+    public void loadMaterialImage() {
+        materialImages.put(Material.SAND, new Image(getClass().getResourceAsStream("/images/sand_texture.jpg")));
+        materialImages.put(Material.ROCK, new Image(getClass().getResourceAsStream("/images/rock_texture.jpg")));
+        materialImages.put(Material.WATER, new Image(getClass().getResourceAsStream("/images/water_texture.png")));
+        materialImages.put(Material.FEATHER, new Image(getClass().getResourceAsStream("/images/feather_texture.jpg")));
+        materialImages.put(Material.LINE, new Image(getClass().getResourceAsStream("/images/line_texture.png")));
     }
 
-    public static void addBlocks(Pane pane, Block[][] grid, int gridLocationX, int gridLocationY, double mouseX, double mouseY) {
-        if (gridLocationX >= 0 &&
-            gridLocationY >= 0 &&
-            gridLocationX < GRID_SIZEX &&
-            gridLocationY < GRID_SIZEY) {
+    public static Image getMaterialImage(Material material) {
+            return materialImages.get(material);
+        }
+    
+        public static void mouseEvents(Pane pane, Block[][] grid, double mouseX, double mouseY, int mouseButton) {
+            if (mouseButton == 0) {
+                int gridLocationX = (int) (mouseX / (SCREEN_WIDTH / GRID_SIZEX));
+                int gridLocationY = (int) (mouseY / (SCREEN_HEIGHT / GRID_SIZEY));
+    
+                addBlocks(pane, grid, gridLocationX, gridLocationY, mouseX, mouseY);
+            } else if (mouseButton == 1) {
+                int gridLocationX = (int) (mouseX / (SCREEN_WIDTH / GRID_SIZEX));
+                int gridLocationY = (int) (mouseY / (SCREEN_HEIGHT / GRID_SIZEY));
+    
+                deleteBlocks(pane, grid, gridLocationX, gridLocationY);
+                
+            }
+    
+        }
+    
+        public static void addBlocks(Pane pane, Block[][] grid, int gridLocationX, int gridLocationY, double mouseX, double mouseY) {
+            if (gridLocationX >= 0 &&
+                gridLocationY >= 0 &&
+                gridLocationX < GRID_SIZEX &&
+                gridLocationY < GRID_SIZEY) {
+                    if(cursorSize > 0) {
+                        for(int i = gridLocationX - cursorSize; i <= gridLocationX + cursorSize; i++) {
+                            for(int j = gridLocationY - cursorSize; j <= gridLocationY + cursorSize; j++) {
+                                if(i < GRID_SIZEX && i >= 0 && j < GRID_SIZEY && j >= 0) {
+                                    if(grid[i][j] == null) {
+                                        double placementX = findNewLocation(mouseX, VERTICAL);
+                                        double placementY = findNewLocation(mouseY, HORIZONTAL);
+    
+                                        Block newBlock = createNewObject(currentMaterial, placementX, placementY);
+    
+                                        grid[i][j] = newBlock;
+                                        pane.getChildren().add(newBlock.getBlockInfo());
+                                    }
+                                }
+                            }
+                        }
+                    } else if (grid[gridLocationX][gridLocationY] == null) {
+                        double placementX = findNewLocation(mouseX, VERTICAL);
+                        double placementY = findNewLocation(mouseY, HORIZONTAL);
+    
+                        Block newBlock = createNewObject(currentMaterial, placementX, placementY);
+    
+                        grid[gridLocationX][gridLocationY] = newBlock;
+    
+                        pane.getChildren().add(newBlock.getBlockInfo());
+                    }
+                }
+        }
+    
+        public static void deleteBlocks(Pane pane, Block[][] grid, int gridLocationX, int gridLocationY) {
+            if (gridLocationX >= 0 &&
+                gridLocationY >= 0 &&
+                gridLocationX < GRID_SIZEX &&
+                gridLocationY < GRID_SIZEY) {
                 if(cursorSize > 0) {
                     for(int i = gridLocationX - cursorSize; i <= gridLocationX + cursorSize; i++) {
                         for(int j = gridLocationY - cursorSize; j <= gridLocationY + cursorSize; j++) {
                             if(i < GRID_SIZEX && i >= 0 && j < GRID_SIZEY && j >= 0) {
-                                if(grid[i][j] == null) {
-                                    double placementX = findNewLocation(mouseX, VERTICAL);
-                                    double placementY = findNewLocation(mouseY, HORIZONTAL);
-
-                                    Block newBlock = createNewObject(currentMaterial, placementX, placementY);
-
-                                    grid[i][j] = newBlock;
-
-                                    newBlock.blockColor();
-                                    pane.getChildren().add(newBlock.getBlockInfo());
+                                if(grid[i][j] != null) {
+                                    pane.getChildren().remove(grid[i][j].getBlockInfo());
+                                    grid[i][j] = null;
+                                    System.out.println("Removed");
+                                    System.out.println(cursorSize);
+                                
                                 }
                             }
                         }
                     }
-                } else if (grid[gridLocationX][gridLocationY] == null) {
-                    double placementX = findNewLocation(mouseX, VERTICAL);
-                    double placementY = findNewLocation(mouseY, HORIZONTAL);
-
-                    Block newBlock = createNewObject(currentMaterial, placementX, placementY);
-
-                    grid[gridLocationX][gridLocationY] = newBlock;
-
-                    newBlock.blockColor();
-                    pane.getChildren().add(newBlock.getBlockInfo());
-                }
-            }
-    }
-
-    public static void deleteBlocks(Pane pane, Block[][] grid, int gridLocationX, int gridLocationY) {
-        if (gridLocationX >= 0 &&
-            gridLocationY >= 0 &&
-            gridLocationX < GRID_SIZEX &&
-            gridLocationY < GRID_SIZEY) {
-            if(cursorSize > 0) {
-                for(int i = gridLocationX - cursorSize; i <= gridLocationX + cursorSize; i++) {
-                    for(int j = gridLocationY - cursorSize; j <= gridLocationY + cursorSize; j++) {
-                        if(i < GRID_SIZEX && i >= 0 && j < GRID_SIZEY && j >= 0) {
-                            if(grid[i][j] != null) {
-                                pane.getChildren().remove(grid[i][j].getBlockInfo());
-                                grid[i][j] = null;
-                                System.out.println("Removed");
-                                System.out.println(cursorSize);
-                            
-                            }
-                        }
+                } else {
+                    if(grid[gridLocationX][gridLocationY] != null) {
+                        pane.getChildren().remove(grid[gridLocationX][gridLocationY].getBlockInfo());
+                        grid[gridLocationX][gridLocationY] = null;
                     }
                 }
-            } else {
-                if(grid[gridLocationX][gridLocationY] != null) {
-                    pane.getChildren().remove(grid[gridLocationX][gridLocationY].getBlockInfo());
-                    grid[gridLocationX][gridLocationY] = null;
-                }
+                    
             }
-                
-        }
-
-    }
     
-    public static Block createNewObject(Material material, double placementX, double placementY) {
-        Block newBlock = null;
+        }
+        
+        public static Block createNewObject(Material material, double placementX, double placementY) {
+            Block newBlock = null;
+            Image image = getMaterialImage(material);
 
         switch (material) {
             case SAND:
                 newBlock = new SandBlock((int) placementX,
                         (int) placementY,
                         (SCREEN_WIDTH / GRID_SIZEX) - GRID_THICKNESS,
-                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS);
+                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS,
+                        image);
                 break;
             case ROCK:
                 newBlock = new RockBlock((int) placementX,
                         (int) placementY,
                         (SCREEN_WIDTH / GRID_SIZEX) - GRID_THICKNESS,
-                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS);
+                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS,
+                        image);
                 break;
             case WATER:
                 newBlock = new WaterBlock((int) placementX,
                         (int) placementY,
                         (SCREEN_WIDTH / GRID_SIZEX) - GRID_THICKNESS,
-                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS);
+                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS,
+                        image);
                 break;
             case FEATHER:
                 newBlock = new FeatherBlock((int) placementX,
                         (int) placementY,
                         (SCREEN_WIDTH / GRID_SIZEX) - GRID_THICKNESS,
-                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS);
+                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS,
+                        image);
                 break;
             case LINE:
                 newBlock = new LineBlock((int) placementX,
                         (int) placementY,
                         (SCREEN_WIDTH / GRID_SIZEX) - GRID_THICKNESS,
-                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS);
+                        (SCREEN_HEIGHT / GRID_SIZEY) - GRID_THICKNESS,
+                        image);
                 break;
             default:
                 break;

@@ -2,15 +2,14 @@ package com.example;
 
 import java.util.Random;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 public class FeatherBlock extends Block {
 
-    public FeatherBlock(int x, int y, double height, double width) {
-        super(x, y, height, width);
-        super.setGravity(500);
+    public FeatherBlock(int x, int y, double height, double width, Image image) {
+        super(x, y, height, width, image);
+        super.setGravity(50);
         super.setStabilityFactor(new Random().nextInt(51) + 40);
     }
 
@@ -23,14 +22,10 @@ public class FeatherBlock extends Block {
         return super.getY();
     }
     @Override
-    public Rectangle getBlockInfo() {
+    public ImageView getBlockInfo() {
         return super.getBlockInfo();
     }
 
-    @Override
-    public void blockColor() {
-        getBlockInfo().setFill(Color.WHITE);
-    }
     @Override
     public double getGravity() {
         return super.getGravity();
