@@ -19,7 +19,6 @@ import javafx.stage.Stage;
  * Next Update:
  * 
  * -Fix Right Mouse Button not working properly (not deleting blocks when hoving over a block)
- * -Add pictures to the blocks
  * -Add Water Physics
  * -Add TNT
  * --Add TNT Explosion
@@ -33,7 +32,7 @@ public class Physics2D extends Application {
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 800 ;
 
-    public static final double GRID_THICKNESS = 2;
+    public static final double GRID_THICKNESS = 1;
 
     public static final int GRID_SIZEX = SCREEN_WIDTH / 20;
     public static final int GRID_SIZEY = SCREEN_HEIGHT / 20;
@@ -86,7 +85,6 @@ public class Physics2D extends Application {
                 if(now - lastTime > 16666666) {
 
                     Gravity.updateGravity(root, grid, now / 1000000 - lastTime / 1000000);
-                    System.out.println("lastTime : " + lastTime);
                     lastTime = now;
                 }
             }

@@ -2,13 +2,14 @@ package com.example;
 
 import java.util.Random;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class RockBlock extends Block {
 
     public RockBlock(int x, int y, double height, double width, Image image) {
         super(x, y, height, width, image);
+        super.setGravity(20);
         super.setStabilityFactor(new Random().nextInt(51) + 25);
     }
     @Override

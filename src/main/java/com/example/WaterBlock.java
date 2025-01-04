@@ -2,10 +2,12 @@ package com.example;
 
 import java.util.Random;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class WaterBlock extends Block {
+
+    private final double flowRate = 1.0;
 
     public WaterBlock(int x, int y, double height, double width, Image image) {
         super(x, y, height, width, image);
@@ -28,6 +30,10 @@ public class WaterBlock extends Block {
     @Override
     public double getGravity() {
         return super.getGravity();
+    }
+
+    public double getFlowRate() {
+        return this.flowRate;
     }
 }
 
