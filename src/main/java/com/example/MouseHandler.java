@@ -12,30 +12,31 @@ public class MouseHandler {
         pane.setOnMousePressed(event -> {
             if(event.getButton() == MouseButton.PRIMARY){
                 isMousePressed = true;
-                isRightMousePressed = true;
+                isLeftMousePressed = true;
                 Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.LMB);
             } else if(event.getButton() == MouseButton.SECONDARY) {
                 isMousePressed = true;
-                isLeftMousePressed = true;
-                Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.RMB);
+                isRightMousePressed = true;
             }
         });
 
         pane.setOnMouseDragged(event -> {
-            if(isMousePressed && event.getButton() == MouseButton.PRIMARY && isRightMousePressed) {
-                Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.LMB);
-            } else if(isMousePressed && event.getButton() == MouseButton.SECONDARY && isLeftMousePressed) {
-                Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.RMB);
+            if(isMousePressed) {
+                if(isRightMousePressed) {
+                    Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.RMB);
+                } else if(isLeftMousePressed) {
+                    Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.LMB);
+                }
             }
         });
 
         pane.setOnMouseReleased(event -> {
-            if(event.getButton() == MouseButton.PRIMARY){
-                isMousePressed = false;
-                isRightMousePressed = false;
-            } else if(event.getButton() == MouseButton.SECONDARY) {
+            if(isLeftMousePressed){
                 isMousePressed = false;
                 isLeftMousePressed = false;
+            } else if(isRightMousePressed) {
+                isMousePressed = false;
+                isRightMousePressed = false;
             }
         });
     }

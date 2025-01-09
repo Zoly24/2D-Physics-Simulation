@@ -28,6 +28,7 @@ public abstract class Block {
         this.stabilityFactor = new Random().nextInt(99) + 1;
     }
 
+
     public double getX() {
         return this.x;
     }

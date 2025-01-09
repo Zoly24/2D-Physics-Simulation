@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 /*
  * Next Update:
  * 
- * -Fix Right Mouse Button not working properly (not deleting blocks when hoving over a block)
  * -Add Water Physics
  * -Add TNT
  * --Add TNT Explosion
@@ -132,15 +131,19 @@ public class Physics2D extends Application {
         }
     
         public static void mouseEvents(Pane pane, Block[][] grid, double mouseX, double mouseY, int mouseButton) {
-            if (mouseButton == 0) {
+            if (mouseButton == LMB) {
                 int gridLocationX = (int) (mouseX / (SCREEN_WIDTH / GRID_SIZEX));
                 int gridLocationY = (int) (mouseY / (SCREEN_HEIGHT / GRID_SIZEY));
+
+                System.out.println("Adding Block at: " + gridLocationX + ", " + gridLocationY);
     
                 addBlocks(pane, grid, gridLocationX, gridLocationY, mouseX, mouseY);
-            } else if (mouseButton == 1) {
+                
+            } else if (mouseButton == RMB) {
                 int gridLocationX = (int) (mouseX / (SCREEN_WIDTH / GRID_SIZEX));
                 int gridLocationY = (int) (mouseY / (SCREEN_HEIGHT / GRID_SIZEY));
     
+                System.out.println("Deleting Block at: " + gridLocationX + ", " + gridLocationY);
                 deleteBlocks(pane, grid, gridLocationX, gridLocationY);
                 
             }
@@ -153,24 +156,26 @@ public class Physics2D extends Application {
                 gridLocationX < GRID_SIZEX &&
                 gridLocationY < GRID_SIZEY) {
                     if(cursorSize > 0) {
-                        for(int i = gridLocationX - cursorSize; i <= gridLocationX + cursorSize; i++) {
-                            for(int j = gridLocationY - cursorSize; j <= gridLocationY + cursorSize; j++) {
+                        for(int i = gridLocationX + cursorSize; i >= gridLocationX - cursorSize; i--) {
+                            for(int j = gridLocationY + cursorSize; j >= gridLocationY - cursorSize; j--) {
                                 if(i < GRID_SIZEX && i >= 0 && j < GRID_SIZEY && j >= 0) {
                                     if(grid[i][j] == null) {
-                                        double placementX = findNewLocation(mouseX, VERTICAL);
-                                        double placementY = findNewLocation(mouseY, HORIZONTAL);
+                                        double placementX = i * ((double) SCREEN_WIDTH / GRID_SIZEX);
+                                        double placementY = j * ((double) SCREEN_HEIGHT / GRID_SIZEY);
     
                                         Block newBlock = createNewObject(currentMaterial, placementX, placementY);
-    
-                                        grid[i][j] = newBlock;
+                                        System.out.println("added block at: " + i + ", " + j);
                                         pane.getChildren().add(newBlock.getBlockInfo());
+                                        System.out.println("rendered");
+                                        grid[i][j] = newBlock;
+                                        
                                     }
                                 }
                             }
                         }
                     } else if (grid[gridLocationX][gridLocationY] == null) {
-                        double placementX = findNewLocation(mouseX, VERTICAL);
-                        double placementY = findNewLocation(mouseY, HORIZONTAL);
+                        double placementX = findNewLocationSingleBlock(mouseX, VERTICAL);
+                        double placementY = findNewLocationSingleBlock(mouseY, HORIZONTAL);
     
                         Block newBlock = createNewObject(currentMaterial, placementX, placementY);
     
@@ -200,11 +205,9 @@ public class Physics2D extends Application {
                             }
                         }
                     }
-                } else {
-                    if(grid[gridLocationX][gridLocationY] != null) {
+                } else if(grid[gridLocationX][gridLocationY] != null) {
                         pane.getChildren().remove(grid[gridLocationX][gridLocationY].getBlockInfo());
                         grid[gridLocationX][gridLocationY] = null;
-                    }
                 }
                     
             }
@@ -258,7 +261,7 @@ public class Physics2D extends Application {
         return newBlock;
     }
 
-    public static double findNewLocation(double currentPosition, int direction) {
+    public static double findNewLocationSingleBlock(double currentPosition, int direction) {
         double BlockXSnap;
 
         switch (direction) {
@@ -277,5 +280,4 @@ public class Physics2D extends Application {
         return newPlacement;
 
     }
-
 }
