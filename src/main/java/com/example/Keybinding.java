@@ -52,11 +52,11 @@ public class Keybinding {
             }
 
             if(event.getCode() == KeyCode.DELETE) {
-                for(int i = 0; i < Physics2D.GRID_SIZEX; i++) {
-                    for(int j = 0; j < Physics2D.GRID_SIZEY; j++) {
-                        if(grid[i][j] != null) {
-                            pane.getChildren().remove(grid[i][j].getBlockInfo());
-                            grid[i][j] = null;
+                for(int row = 0; row < Physics2D.GRID_ROWS; row++) {
+                    for(int column = 0; column < Physics2D.GRID_COLUMNS; column++) {
+                        if(grid[row][column] != null) {
+                            pane.getChildren().remove(grid[row][column].getBlockInfo());
+                            grid[row][column] = null;
                         }
                     }
                 }
