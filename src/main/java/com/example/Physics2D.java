@@ -28,8 +28,8 @@ public class Physics2D extends Application {
     public static final int VERTICAL = 0;
     public static final int HORIZONTAL = 1;
 
-    public static final int SCREEN_WIDTH = 1200;
-    public static final int SCREEN_HEIGHT = 1200;
+    public static final int SCREEN_WIDTH = 800;
+    public static final int SCREEN_HEIGHT = 800;
 
     public static final double GRID_THICKNESS = 1;
 
@@ -39,7 +39,7 @@ public class Physics2D extends Application {
     public static final int LMB = 0;
     public static final int RMB = 1;
 
-    public static final Color BACKGROUND_COLOR = Color.rgb(61, 117, 122);
+    public static final Color BACKGROUND_COLOR = Color.rgb(53, 127, 187);
 
     public enum Material {
         SAND,
@@ -125,10 +125,10 @@ public class Physics2D extends Application {
 
     public void loadMaterialImage() {
         materialImages.put(Material.SAND, new Image(getClass().getResourceAsStream("/images/sand_texture.jpg")));
-        materialImages.put(Material.ROCK, new Image(getClass().getResourceAsStream("/images/rock_texture.jpg")));
+        materialImages.put(Material.ROCK, new Image(getClass().getResourceAsStream("/images/rock_texture.png")));
         materialImages.put(Material.WATER, new Image(getClass().getResourceAsStream("/images/water_texture.png")));
         materialImages.put(Material.FEATHER, new Image(getClass().getResourceAsStream("/images/feather_texture.jpg")));
-        materialImages.put(Material.LINE, new Image(getClass().getResourceAsStream("/images/line_texture.png")));
+        materialImages.put(Material.LINE, new Image(getClass().getResourceAsStream("/images/line_texture.jpg")));
     }
 
     public static Image getMaterialImage(Material material) {

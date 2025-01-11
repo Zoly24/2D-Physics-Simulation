@@ -10,7 +10,7 @@ public abstract class Block {
     private double x;
     private double y;
     private final ImageView ImageView;
-    private double gravity = 30;
+    private double gravity = 60;
     private double elapsedTime;
     private int stabilityFactor;
 
