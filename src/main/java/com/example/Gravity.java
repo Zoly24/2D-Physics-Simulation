@@ -42,9 +42,7 @@ public class Gravity{
                                                  !blockLocations[LOWER_ROW][MIDDLE_COLUMN];
 
                         if(!isSurrounded){
-                            if(currentBlock instanceof WaterBlock){
-                                applyWaterFlow(pane, grid, row, column, (WaterBlock) currentBlock, blockLocations);
-                            } else if (blockLocations[LOWER_ROW][MIDDLE_COLUMN]) {
+                            if (blockLocations[LOWER_ROW][MIDDLE_COLUMN]) {
                                 applyGravity(pane, grid, row, column, currentBlock, MOVE_DOWN);
                             } else if (canMoveLeftOrRight(blockLocations, currentBlock)) {
                                 int direction = new Random().nextInt(2) + 1;
@@ -57,6 +55,8 @@ public class Gravity{
                                 applyGravity(pane, grid, row, column, currentBlock, MOVE_LEFT);
                             } else if (canMoveRight(blockLocations, currentBlock)) {
                                 applyGravity(pane, grid, row, column, currentBlock, MOVE_RIGHT);
+                            } else if(currentBlock instanceof WaterBlock) {
+                                applyWaterFlow(grid, row, column,(WaterBlock) currentBlock, blockLocations, isSurrounded);
                             }
                         }
                         
@@ -89,7 +89,7 @@ public class Gravity{
                 !currentBlock.isStable();
     }
 
-    public static void applyWaterFlow(Pane pane, Block[][] grid, int row, int column, WaterBlock waterBlock, boolean[][] blockLocations) {
+    public static void applyWaterFlow(Block[][] grid, int row, int column,WaterBlock waterBlock, boolean[][] blockLocations, boolean isSurrounded) {
         
     }
 
