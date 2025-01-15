@@ -11,7 +11,6 @@ public class WaterBlock extends Block {
 
     public WaterBlock(int x, int y, double height, double width, Image image) {
         super(x, y, height, width, image);
-        super.setGravity(40);
         super.setStabilityFactor(new Random().nextInt(50) + 1);
     }
     @Override

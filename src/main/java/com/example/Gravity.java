@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 
 public class Gravity{
 
-    private static final int MOVE_DOWN = 0, MOVE_LEFT = 1, MOVE_RIGHT = 2;
+    private static final int NO_MOVE = -1, MOVE_DOWN = 0, MOVE_LEFT = 1, MOVE_RIGHT = 2;
 
     private static final int MIDDLE_ROW = 0, LOWER_ROW = 1;
 
@@ -41,22 +41,29 @@ public class Gravity{
                                                  !blockLocations[MIDDLE_ROW][RIGHT_COLUMN] &&
                                                  !blockLocations[LOWER_ROW][MIDDLE_COLUMN];
 
+                        boolean isFalling = false;
+
                         if(!isSurrounded){
                             if (blockLocations[LOWER_ROW][MIDDLE_COLUMN]) {
-                                applyGravity(pane, grid, row, column, currentBlock, MOVE_DOWN);
+                                isFalling = true;
+                                applyGravity(pane, grid, row, column, currentBlock, MOVE_DOWN, isFalling);
                             } else if (canMoveLeftOrRight(blockLocations, currentBlock)) {
+                                isFalling = true;
                                 int direction = new Random().nextInt(2) + 1;
                                 if (direction == MOVE_RIGHT) {
-                                    applyGravity(pane, grid, row, column, currentBlock, MOVE_RIGHT);
+                                    applyGravity(pane, grid, row, column, currentBlock, MOVE_RIGHT, isFalling);
                                 } else {
-                                    applyGravity(pane, grid, row, column, currentBlock, MOVE_LEFT);
+                                    applyGravity(pane, grid, row, column, currentBlock, MOVE_LEFT, isFalling);
                                 }
                             } else if (canMoveLeft(blockLocations, currentBlock)) {
-                                applyGravity(pane, grid, row, column, currentBlock, MOVE_LEFT);
+                                isFalling = true;
+                                applyGravity(pane, grid, row, column, currentBlock, MOVE_LEFT, isFalling);
                             } else if (canMoveRight(blockLocations, currentBlock)) {
-                                applyGravity(pane, grid, row, column, currentBlock, MOVE_RIGHT);
+                                isFalling = true;
+                                applyGravity(pane, grid, row, column, currentBlock, MOVE_RIGHT, isFalling);
                             } else if(currentBlock instanceof WaterBlock) {
-                                applyWaterFlow(grid, row, column,(WaterBlock) currentBlock, blockLocations, isSurrounded);
+                                int direction = applyWaterFlow(grid, row, column);
+                                applyGravity(pane, grid, row, column, currentBlock, direction, isFalling);
                             }
                         }
                         
@@ -89,13 +96,74 @@ public class Gravity{
                 !currentBlock.isStable();
     }
 
-    public static void applyWaterFlow(Block[][] grid, int row, int column,WaterBlock waterBlock, boolean[][] blockLocations, boolean isSurrounded) {
-        
+    public static int applyWaterFlow(Block[][] grid, int row, int column) {
+        int aboveRow = row - 1;
+
+        if(aboveRow >= 0) {
+            boolean aboveRowNotFull = false;
+            for(int currentColumn = 0; currentColumn < Physics2D.GRID_COLUMNS; currentColumn++) {
+                if(grid[aboveRow][currentColumn] == null) {
+                     aboveRowNotFull = true;
+                     break;
+                }
+            }
+
+            if(aboveRowNotFull && column + 1 < Physics2D.GRID_COLUMNS && column - 1 >= 0) {
+                boolean foundWaterRight = false;
+                boolean foundWaterLeft = false;
+                boolean foundWaterAbove = grid[aboveRow][column] instanceof WaterBlock;
+
+                for(int columnsRight = column; columnsRight < Physics2D.GRID_COLUMNS; columnsRight++) {
+                    if(grid[aboveRow][columnsRight] instanceof WaterBlock) {
+                        foundWaterRight = true;
+                        break;
+                    } else if (grid[aboveRow][columnsRight] != null) {
+                        break;
+                    }
+                }
+
+                for(int columnsLeft = column; columnsLeft >= 0; columnsLeft--) {
+                    if(grid[aboveRow][columnsLeft] instanceof WaterBlock) {
+                        foundWaterLeft = true;
+                        break;
+                    } else if (grid[aboveRow][columnsLeft] != null) {
+                        break;
+                    }
+                }
+
+                if (foundWaterRight) {
+                    if(grid[row][column - 1] == null) {
+                        return MOVE_LEFT;
+                    } else {
+                        return NO_MOVE;
+                    }
+                } else if (foundWaterLeft) {
+                    if(grid[row][column + 1] == null) {
+                        return MOVE_RIGHT;
+                    } else {
+                        return NO_MOVE;
+                    }
+                } else if (foundWaterAbove) {
+                    if(grid[row][column - 1] == null) {
+                        return MOVE_LEFT;
+                    } else if(grid[row][column + 1] == null) {
+                        return MOVE_RIGHT;
+                    } else {
+                        return NO_MOVE;
+                    }
+                }
+            }
+        }
+        return NO_MOVE;
     }
 
-    public static void applyGravity(Pane pane, Block[][] grid, int row, int column, Block block, int direction) {
-        int newRow = row + 1;
+    public static void applyGravity(Pane pane, Block[][] grid, int row, int column, Block block, int direction, boolean isFalling) {
+        int newRow = row;
         int newColumn = column;
+        
+        if(isFalling) {
+            newRow = row + 1;
+        }
 
         if (direction == MOVE_LEFT) {
             newColumn = column - 1;
