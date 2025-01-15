@@ -19,6 +19,8 @@ public class Gravity{
                     continue;
                 }
                 Block currentBlock = grid[row][column];
+
+                
                 
                 if (currentBlock.isAffectedByGravity() &&
                     row + 1 < Physics2D.GRID_ROWS) {
@@ -62,7 +64,7 @@ public class Gravity{
                                 isFalling = true;
                                 applyGravity(pane, grid, row, column, currentBlock, MOVE_RIGHT, isFalling);
                             } else if(currentBlock instanceof WaterBlock) {
-                                int direction = applyWaterFlow(grid, row, column);
+                                int direction = applyLiquidFlow(grid, row, column);
                                 applyGravity(pane, grid, row, column, currentBlock, direction, isFalling);
                             }
                         }
@@ -96,7 +98,7 @@ public class Gravity{
                 !currentBlock.isStable();
     }
 
-    public static int applyWaterFlow(Block[][] grid, int row, int column) {
+    public static int applyLiquidFlow(Block[][] grid, int row, int column) {
         int aboveRow = row - 1;
 
         if(aboveRow >= 0) {
@@ -160,6 +162,7 @@ public class Gravity{
     public static void applyGravity(Pane pane, Block[][] grid, int row, int column, Block block, int direction, boolean isFalling) {
         int newRow = row;
         int newColumn = column;
+        
         
         if(isFalling) {
             newRow = row + 1;

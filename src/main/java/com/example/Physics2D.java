@@ -17,8 +17,7 @@ import javafx.stage.Stage;
 
 /*
  * Next Update:
- * 
- * -Add Water Physics
+ * -Add Difference between Solid and Liquid (maybe gas)
  * -Add TNT
  * --Add TNT Explosion
  * 

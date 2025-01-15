@@ -5,13 +5,13 @@ import java.util.Random;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class WaterBlock extends Block {
-
-    private final double flowRate = 1.0;
-
+public class WaterBlock extends LiquidBlock {
     public WaterBlock(int x, int y, double height, double width, Image image) {
         super(x, y, height, width, image);
         super.setStabilityFactor(new Random().nextInt(50) + 1);
+
+        super.setDensity(1);
+
     }
     @Override
     public double getX() {
@@ -29,10 +29,6 @@ public class WaterBlock extends Block {
     @Override
     public double getGravity() {
         return super.getGravity();
-    }
-
-    public double getFlowRate() {
-        return this.flowRate;
     }
 }
 

@@ -13,6 +13,7 @@ public abstract class Block {
     private double gravity = 60;
     private double elapsedTime;
     private int stabilityFactor;
+    private double density;
 
     public Block(int x, int y, double width, double height, Image image) {
         this.x = x;
@@ -26,6 +27,8 @@ public abstract class Block {
 
         this.elapsedTime = 0;
         this.stabilityFactor = new Random().nextInt(99) + 1;
+
+        this.density = 1;
     }
 
 
@@ -69,6 +72,14 @@ public abstract class Block {
 
     public boolean isStable() {
         return stabilityFactor > 50;
+    }
+
+    public double getDensity() {
+        return this.density;
+    }
+
+    public void setDensity(double density) {
+        this.density = density;
     }
 
     public double getElapsedTime() {
