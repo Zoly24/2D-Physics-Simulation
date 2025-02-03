@@ -3,7 +3,6 @@ package com.example;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
 public class LineBlock extends Block {
 
     public LineBlock(int x, int y, double height, double width, Image image) {
@@ -11,14 +10,17 @@ public class LineBlock extends Block {
         super.setGravity(0);
         super.setStabilityFactor(100);
     }
+
     @Override
     public double getX() {
         return super.getX();
     }
+
     @Override
     public double getY() {
         return super.getY();
     }
+
     @Override
     public ImageView getBlockInfo() {
         return super.getBlockInfo();
@@ -29,4 +31,3 @@ public class LineBlock extends Block {
         return super.getGravity();
     }
 }
-

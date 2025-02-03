@@ -33,28 +33,28 @@ public class Keybinding {
             }
 
             switch (event.getCode()) {
-                case UP :
+                case UP:
                     Physics2D.cursorSize += 1;
                     break;
-                case DOWN :
+                case DOWN:
                     Physics2D.cursorSize -= 1;
                     break;
                 default:
                     break;
             }
 
-            if(Physics2D.cursorSize < 0) {
+            if (Physics2D.cursorSize < 0) {
                 Physics2D.cursorSize = 0;
             }
 
-            if(event.getCode() == KeyCode.ESCAPE) {
+            if (event.getCode() == KeyCode.ESCAPE) {
                 System.exit(0);
             }
 
-            if(event.getCode() == KeyCode.DELETE) {
-                for(int row = 0; row < Physics2D.GRID_ROWS; row++) {
-                    for(int column = 0; column < Physics2D.GRID_COLUMNS; column++) {
-                        if(grid[row][column] != null) {
+            if (event.getCode() == KeyCode.DELETE) {
+                for (int row = 0; row < Physics2D.GRID_ROWS; row++) {
+                    for (int column = 0; column < Physics2D.GRID_COLUMNS; column++) {
+                        if (grid[row][column] != null) {
                             pane.getChildren().remove(grid[row][column].getBlockInfo());
                             grid[row][column] = null;
                         }

@@ -31,7 +31,6 @@ public abstract class Block {
         this.density = 1;
     }
 
-
     public double getX() {
         return this.x;
     }
@@ -101,4 +100,3 @@ public abstract class Block {
         this.ImageView.setY(y);
     }
 }
-

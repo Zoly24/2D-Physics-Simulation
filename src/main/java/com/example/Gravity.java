@@ -4,7 +4,7 @@ import java.util.Random;
 
 import javafx.scene.layout.Pane;
 
-public class Gravity{
+public class Gravity {
 
     private static final int NO_MOVE = -1, MOVE_DOWN = 0, MOVE_LEFT = 1, MOVE_RIGHT = 2;
 
@@ -15,15 +15,13 @@ public class Gravity{
     public static void updateGravity(Pane pane, Block[][] grid, long deltaTime) {
         for (int row = 0; row < Physics2D.GRID_ROWS; row++) {
             for (int column = Physics2D.GRID_COLUMNS - 1; column >= 0; column--) {
-                if(grid[row][column] == null){
+                if (grid[row][column] == null) {
                     continue;
                 }
                 Block currentBlock = grid[row][column];
 
-                
-                
                 if (currentBlock.isAffectedByGravity() &&
-                    row + 1 < Physics2D.GRID_ROWS) {
+                        row + 1 < Physics2D.GRID_ROWS) {
 
                     currentBlock.setElapsedTime(currentBlock.getElapsedTime() + deltaTime);
 
@@ -34,18 +32,20 @@ public class Gravity{
                         boolean validLeftBound = left >= 0;
                         boolean validRightBound = right < Physics2D.GRID_COLUMNS;
 
-                        boolean[][] blockLocations = new boolean[][]{
-                            {validLeftBound && grid[row][left] == null, grid[row][column] == null, validRightBound && grid[row][right] == null},
-                            {validLeftBound && grid[row + 1][left] == null, grid[row + 1][column] == null, validRightBound && grid[row + 1][column + 1] == null}
+                        boolean[][] blockLocations = new boolean[][] {
+                                { validLeftBound && grid[row][left] == null, grid[row][column] == null,
+                                        validRightBound && grid[row][right] == null },
+                                { validLeftBound && grid[row + 1][left] == null, grid[row + 1][column] == null,
+                                        validRightBound && grid[row + 1][column + 1] == null }
                         };
 
-                        boolean isSurrounded =   !blockLocations[MIDDLE_ROW][LEFT_COLUMN] &&
-                                                 !blockLocations[MIDDLE_ROW][RIGHT_COLUMN] &&
-                                                 !blockLocations[LOWER_ROW][MIDDLE_COLUMN];
+                        boolean isSurrounded = !blockLocations[MIDDLE_ROW][LEFT_COLUMN] &&
+                                !blockLocations[MIDDLE_ROW][RIGHT_COLUMN] &&
+                                !blockLocations[LOWER_ROW][MIDDLE_COLUMN];
 
                         boolean isFalling = false;
 
-                        if(!isSurrounded){
+                        if (!isSurrounded) {
                             if (blockLocations[LOWER_ROW][MIDDLE_COLUMN]) {
                                 isFalling = true;
                                 applyGravity(pane, grid, row, column, currentBlock, MOVE_DOWN, isFalling);
@@ -63,12 +63,11 @@ public class Gravity{
                             } else if (canMoveRight(blockLocations, currentBlock)) {
                                 isFalling = true;
                                 applyGravity(pane, grid, row, column, currentBlock, MOVE_RIGHT, isFalling);
-                            } else if(currentBlock instanceof WaterBlock) {
+                            } else if (currentBlock instanceof WaterBlock) {
                                 int direction = applyLiquidFlow(grid, row, column);
                                 applyGravity(pane, grid, row, column, currentBlock, direction, isFalling);
                             }
                         }
-                        
 
                         currentBlock.setElapsedTime(0);
                         currentBlock.setGravity(currentBlock.getGravity() / 1);
@@ -79,7 +78,7 @@ public class Gravity{
     }
 
     private static boolean canMoveLeftOrRight(boolean[][] blockLocations, Block currentBlock) {
-        return  blockLocations[MIDDLE_ROW][LEFT_COLUMN] &&
+        return blockLocations[MIDDLE_ROW][LEFT_COLUMN] &&
                 blockLocations[MIDDLE_ROW][RIGHT_COLUMN] &&
                 blockLocations[LOWER_ROW][LEFT_COLUMN] &&
                 blockLocations[LOWER_ROW][RIGHT_COLUMN] &&
@@ -87,13 +86,13 @@ public class Gravity{
     }
 
     private static boolean canMoveLeft(boolean[][] blockLocations, Block currentBlock) {
-        return  blockLocations[LOWER_ROW][LEFT_COLUMN] &&
+        return blockLocations[LOWER_ROW][LEFT_COLUMN] &&
                 blockLocations[MIDDLE_ROW][LEFT_COLUMN] &&
                 !currentBlock.isStable();
     }
 
     private static boolean canMoveRight(boolean[][] blockLocations, Block currentBlock) {
-        return  blockLocations[LOWER_ROW][RIGHT_COLUMN] &&
+        return blockLocations[LOWER_ROW][RIGHT_COLUMN] &&
                 blockLocations[MIDDLE_ROW][RIGHT_COLUMN] &&
                 !currentBlock.isStable();
     }
@@ -101,22 +100,22 @@ public class Gravity{
     public static int applyLiquidFlow(Block[][] grid, int row, int column) {
         int aboveRow = row - 1;
 
-        if(aboveRow >= 0) {
+        if (aboveRow >= 0) {
             boolean aboveRowNotFull = false;
-            for(int currentColumn = 0; currentColumn < Physics2D.GRID_COLUMNS; currentColumn++) {
-                if(grid[aboveRow][currentColumn] == null) {
-                     aboveRowNotFull = true;
-                     break;
+            for (int currentColumn = 0; currentColumn < Physics2D.GRID_COLUMNS; currentColumn++) {
+                if (grid[aboveRow][currentColumn] == null) {
+                    aboveRowNotFull = true;
+                    break;
                 }
             }
 
-            if(aboveRowNotFull && column + 1 < Physics2D.GRID_COLUMNS && column - 1 >= 0) {
+            if (aboveRowNotFull && column + 1 < Physics2D.GRID_COLUMNS && column - 1 >= 0) {
                 boolean foundWaterRight = false;
                 boolean foundWaterLeft = false;
                 boolean foundWaterAbove = grid[aboveRow][column] instanceof WaterBlock;
 
-                for(int columnsRight = column; columnsRight < Physics2D.GRID_COLUMNS; columnsRight++) {
-                    if(grid[aboveRow][columnsRight] instanceof WaterBlock) {
+                for (int columnsRight = column; columnsRight < Physics2D.GRID_COLUMNS; columnsRight++) {
+                    if (grid[aboveRow][columnsRight] instanceof WaterBlock) {
                         foundWaterRight = true;
                         break;
                     } else if (grid[aboveRow][columnsRight] != null) {
@@ -124,8 +123,8 @@ public class Gravity{
                     }
                 }
 
-                for(int columnsLeft = column; columnsLeft >= 0; columnsLeft--) {
-                    if(grid[aboveRow][columnsLeft] instanceof WaterBlock) {
+                for (int columnsLeft = column; columnsLeft >= 0; columnsLeft--) {
+                    if (grid[aboveRow][columnsLeft] instanceof WaterBlock) {
                         foundWaterLeft = true;
                         break;
                     } else if (grid[aboveRow][columnsLeft] != null) {
@@ -134,21 +133,21 @@ public class Gravity{
                 }
 
                 if (foundWaterRight) {
-                    if(grid[row][column - 1] == null) {
+                    if (grid[row][column - 1] == null) {
                         return MOVE_LEFT;
                     } else {
                         return NO_MOVE;
                     }
                 } else if (foundWaterLeft) {
-                    if(grid[row][column + 1] == null) {
+                    if (grid[row][column + 1] == null) {
                         return MOVE_RIGHT;
                     } else {
                         return NO_MOVE;
                     }
                 } else if (foundWaterAbove) {
-                    if(grid[row][column - 1] == null) {
+                    if (grid[row][column - 1] == null) {
                         return MOVE_LEFT;
-                    } else if(grid[row][column + 1] == null) {
+                    } else if (grid[row][column + 1] == null) {
                         return MOVE_RIGHT;
                     } else {
                         return NO_MOVE;
@@ -159,19 +158,19 @@ public class Gravity{
         return NO_MOVE;
     }
 
-    public static void applyGravity(Pane pane, Block[][] grid, int row, int column, Block block, int direction, boolean isFalling) {
+    public static void applyGravity(Pane pane, Block[][] grid, int row, int column, Block block, int direction,
+            boolean isFalling) {
         int newRow = row;
         int newColumn = column;
-        
-        
-        if(isFalling) {
+
+        if (isFalling) {
             newRow = row + 1;
         }
 
         if (direction == MOVE_LEFT) {
             newColumn = column - 1;
         } else if (direction == MOVE_RIGHT) {
-            newColumn  = column + 1;
+            newColumn = column + 1;
         }
 
         if (newRow < Physics2D.GRID_ROWS && newColumn >= 0 && newColumn < Physics2D.GRID_COLUMNS) {
@@ -192,7 +191,7 @@ public class Gravity{
         for (int row = 0; row < Physics2D.GRID_ROWS; row++) {
             for (int column = 0; column < Physics2D.GRID_COLUMNS; column++) {
                 Block currentBlock = grid[row][column];
-                
+
                 if (currentBlock != null) {
                     if (!pane.getChildren().contains(currentBlock.getBlockInfo())) {
                         pane.getChildren().add(currentBlock.getBlockInfo());
@@ -202,4 +201,3 @@ public class Gravity{
         }
     }
 }
-

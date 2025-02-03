@@ -10,35 +10,34 @@ public class MouseHandler {
 
     public static void mousePressedEvents(Pane pane, Block[][] grid) {
         pane.setOnMousePressed(event -> {
-            if(event.getButton() == MouseButton.PRIMARY){
+            if (event.getButton() == MouseButton.PRIMARY) {
                 isMousePressed = true;
                 isLeftMousePressed = true;
                 Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.LMB);
-            } else if(event.getButton() == MouseButton.SECONDARY) {
+            } else if (event.getButton() == MouseButton.SECONDARY) {
                 isMousePressed = true;
                 isRightMousePressed = true;
             }
         });
 
         pane.setOnMouseDragged(event -> {
-            if(isMousePressed) {
-                if(isRightMousePressed) {
+            if (isMousePressed) {
+                if (isRightMousePressed) {
                     Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.RMB);
-                } else if(isLeftMousePressed) {
+                } else if (isLeftMousePressed) {
                     Physics2D.mouseEvents(pane, grid, event.getX(), event.getY(), Physics2D.LMB);
                 }
             }
         });
 
         pane.setOnMouseReleased(event -> {
-            if(isLeftMousePressed){
+            if (isLeftMousePressed) {
                 isMousePressed = false;
                 isLeftMousePressed = false;
-            } else if(isRightMousePressed) {
+            } else if (isRightMousePressed) {
                 isMousePressed = false;
                 isRightMousePressed = false;
             }
         });
     }
 }
-

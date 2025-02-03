@@ -18,14 +18,17 @@ public class SandBlock extends SolidBlock {
     public double getX() {
         return super.getX();
     }
+
     @Override
     public double getY() {
         return super.getY();
     }
+
     @Override
     public ImageView getBlockInfo() {
         return super.getBlockInfo();
     }
+
     @Override
     public double getGravity() {
         return super.getGravity();
