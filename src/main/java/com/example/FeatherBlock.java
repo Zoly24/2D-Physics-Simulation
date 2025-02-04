@@ -19,10 +19,12 @@ public class FeatherBlock extends SolidBlock {
     public double getX() {
         return super.getX();
     }
+
     @Override
     public double getY() {
         return super.getY();
     }
+
     @Override
     public ImageView getBlockInfo() {
         return super.getBlockInfo();

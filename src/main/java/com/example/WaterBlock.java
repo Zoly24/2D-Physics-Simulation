@@ -13,14 +13,17 @@ public class WaterBlock extends LiquidBlock {
         super.setDensity(1);
 
     }
+
     @Override
     public double getX() {
         return super.getX();
     }
+
     @Override
     public double getY() {
         return super.getY();
     }
+
     @Override
     public ImageView getBlockInfo() {
         return super.getBlockInfo();
@@ -31,4 +34,3 @@ public class WaterBlock extends LiquidBlock {
         return super.getGravity();
     }
 }
-

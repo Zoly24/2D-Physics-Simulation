@@ -14,14 +14,17 @@ public class RockBlock extends SolidBlock {
 
         super.setDensity(2.8);
     }
+
     @Override
     public double getX() {
         return super.getX();
     }
+
     @Override
     public double getY() {
         return super.getY();
     }
+
     @Override
     public ImageView getBlockInfo() {
         return super.getBlockInfo();
@@ -32,4 +35,3 @@ public class RockBlock extends SolidBlock {
         return super.getGravity();
     }
 }
-
