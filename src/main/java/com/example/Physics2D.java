@@ -144,72 +144,22 @@ public class Physics2D extends Application {
             deleteBlocks(pane, grid, gridLocationRow, gridLocationColumn);
 
         }
-
-<<<<<<< HEAD
-        public static boolean gridWithinBounds(int gridLocationRow, int gridLocationColumn) {
-            return gridLocationRow >= 0 &&
-                    gridLocationColumn >= 0 &&
-                    gridLocationColumn < GRID_COLUMNS &&
-                    gridLocationRow < GRID_ROWS;
-            
-        }
-    
-        public static void addBlocks(Pane pane, Block[][] grid, int gridLocationRow, int gridLocationColumn, double mouseX, double mouseY) {
-            if (gridWithinBounds(gridLocationRow, gridLocationColumn)) {
-                    if(cursorSize > 0) {
-                        for(int row = gridLocationRow + cursorSize; row >= gridLocationRow - cursorSize; row--) {
-                            for(int column = gridLocationColumn + cursorSize; column >= gridLocationColumn - cursorSize; column--) {
-                                if(row < GRID_ROWS && row >= 0 && column < GRID_COLUMNS && column >= 0) {
-                                    if(grid[row][column] == null) {
-                                        double placementX = column * ((double) SCREEN_WIDTH / GRID_COLUMNS);
-                                        double placementY = row * ((double) SCREEN_HEIGHT / GRID_ROWS);
-    
-                                        Block newBlock = createNewObject(currentMaterial, placementX, placementY);
-                                        pane.getChildren().add(newBlock.getBlockInfo());
-                                        grid[row][column] = newBlock;
-                                        
-                                    }
-                                }
-                            }
-                        }
-                    } else if (grid[gridLocationRow][gridLocationColumn] == null) {
-                        double placementX = findNewLocationSingleBlock(mouseX, HORIZONTAL);
-                        double placementY = findNewLocationSingleBlock(mouseY, VERTICAL);
-    
-                        Block newBlock = createNewObject(currentMaterial, placementX, placementY);
-    
-                        grid[gridLocationRow][gridLocationColumn] = newBlock;
-    
-                        pane.getChildren().add(newBlock.getBlockInfo());
-                    }
-                }
-        }
-    
-        public static void deleteBlocks(Pane pane, Block[][] grid, int gridLocationRow, int gridLocationColumn) {
-            if (gridWithinBounds(gridLocationRow, gridLocationColumn)) {
-                for(int row = gridLocationRow - cursorSize; row <= gridLocationRow + cursorSize; row++) {
-                    for(int column = gridLocationColumn - cursorSize; column <= gridLocationColumn + cursorSize; column++) {
-                        if(row < GRID_ROWS && row >= 0 && column < GRID_COLUMNS && column >= 0) {
-                            if(grid[row][column] != null) {
-                                pane.getChildren().remove(grid[row][column].getBlockInfo());
-                                grid[row][column] = null;
-                            
-=======
+        
     }
 
     public static boolean gridWithinBounds(int gridLocationRow, int gridLocationColumn) {
-        return gridLocationRow >= 0 && gridLocationColumn >= 0 && gridLocationColumn < GRID_COLUMNS
+        return gridLocationRow >= 0
+                && gridLocationColumn >= 0
+                && gridLocationColumn < GRID_COLUMNS
                 && gridLocationRow < GRID_ROWS;
 
     }
 
-    public static void addBlocks(Pane pane, Block[][] grid, int gridLocationRow, int gridLocationColumn, double mouseX,
-            double mouseY) {
+    public static void addBlocks(Pane pane, Block[][] grid, int gridLocationRow, int gridLocationColumn, double mouseX, double mouseY) {
         if (gridWithinBounds(gridLocationRow, gridLocationColumn)) {
             if (cursorSize > 0) {
                 for (int row = gridLocationRow + cursorSize; row >= gridLocationRow - cursorSize; row--) {
-                    for (int column = gridLocationColumn + cursorSize; column >= gridLocationColumn
-                            - cursorSize; column--) {
+                    for (int column = gridLocationColumn + cursorSize; column >= gridLocationColumn - cursorSize; column--) {
                         if (row < GRID_ROWS && row >= 0 && column < GRID_COLUMNS && column >= 0) {
                             if (grid[row][column] == null) {
                                 double placementX = column * ((double) SCREEN_WIDTH / GRID_COLUMNS);
@@ -219,7 +169,6 @@ public class Physics2D extends Application {
                                 pane.getChildren().add(newBlock.getBlockInfo());
                                 grid[row][column] = newBlock;
 
->>>>>>> 86008be7a433c8226d1d04376514a952063c14af
                             }
                         }
                     }
@@ -240,8 +189,7 @@ public class Physics2D extends Application {
     public static void deleteBlocks(Pane pane, Block[][] grid, int gridLocationRow, int gridLocationColumn) {
         if (gridWithinBounds(gridLocationRow, gridLocationColumn)) {
             for (int row = gridLocationRow - cursorSize; row <= gridLocationRow + cursorSize; row++) {
-                for (int column = gridLocationColumn - cursorSize; column <= gridLocationColumn
-                        + cursorSize; column++) {
+                for (int column = gridLocationColumn - cursorSize; column <= gridLocationColumn + cursorSize; column++) {
                     if (row < GRID_ROWS && row >= 0 && column < GRID_COLUMNS && column >= 0) {
                         if (grid[row][column] != null) {
                             pane.getChildren().remove(grid[row][column].getBlockInfo());
@@ -251,11 +199,7 @@ public class Physics2D extends Application {
                     }
                 }
             }
-        } else if (grid[gridLocationRow][gridLocationColumn] != null) {
-            pane.getChildren().remove(grid[gridLocationRow][gridLocationColumn].getBlockInfo());
-            grid[gridLocationRow][gridLocationColumn] = null;
         }
-
     }
 
     public static Block createNewObject(Material material, double placementX, double placementY) {

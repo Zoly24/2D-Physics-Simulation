@@ -19,11 +19,6 @@ public class Gravity {
                     continue;
                 }
                 Block currentBlock = grid[row][column];
-<<<<<<< HEAD
-
-=======
-                
->>>>>>> parent of d2e4878 (Refactor Blocks to be more specific of type (Solid or Liquid))
                 if (currentBlock.isAffectedByGravity() &&
                         row + 1 < Physics2D.GRID_ROWS) {
 
@@ -67,13 +62,8 @@ public class Gravity {
                             } else if (canMoveRight(blockLocations, currentBlock)) {
                                 isFalling = true;
                                 applyGravity(pane, grid, row, column, currentBlock, MOVE_RIGHT, isFalling);
-<<<<<<< HEAD
-                            } else if (currentBlock instanceof WaterBlock) {
-                                int direction = applyLiquidFlow(grid, row, column);
-=======
                             } else if(currentBlock instanceof WaterBlock) {
                                 int direction = applyWaterFlow(grid, row, column);
->>>>>>> parent of d2e4878 (Refactor Blocks to be more specific of type (Solid or Liquid))
                                 applyGravity(pane, grid, row, column, currentBlock, direction, isFalling);
                             }
                         }
@@ -171,13 +161,8 @@ public class Gravity {
             boolean isFalling) {
         int newRow = row;
         int newColumn = column;
-<<<<<<< HEAD
-
-        if (isFalling) {
-=======
         
         if(isFalling) {
->>>>>>> parent of d2e4878 (Refactor Blocks to be more specific of type (Solid or Liquid))
             newRow = row + 1;
         }
 
