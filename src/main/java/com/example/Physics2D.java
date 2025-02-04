@@ -149,7 +149,10 @@ public class Physics2D extends Application {
         }
 
         public static boolean gridWithinBounds(int gridLocationRow, int gridLocationColumn) {
-            return gridLocationRow >= 0 && gridLocationColumn >= 0 && gridLocationColumn < GRID_COLUMNS && gridLocationRow < GRID_ROWS;
+            return gridLocationRow >= 0 &&
+                    gridLocationColumn >= 0 &&
+                    gridLocationColumn < GRID_COLUMNS &&
+                    gridLocationRow < GRID_ROWS;
             
         }
     
