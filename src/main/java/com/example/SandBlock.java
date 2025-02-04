@@ -5,13 +5,11 @@ import java.util.Random;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class SandBlock extends SolidBlock {
+public class SandBlock extends Block {
 
     public SandBlock(int x, int y, double height, double width, Image image) {
         super(x, y, height, width, image);
         super.setStabilityFactor(new Random().nextInt(50) + 1);
-
-        super.setDensity(1.52);
     }
 
     @Override
