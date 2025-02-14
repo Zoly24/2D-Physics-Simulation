@@ -122,11 +122,11 @@ public class Physics2D extends Application {
     }
 
     public void loadMaterialImage() {
-        materialImages.put(Material.SAND, new Image(getClass().getResourceAsStream("/images/sand_texture.jpg")));
+        materialImages.put(Material.SAND, new Image(getClass().getResourceAsStream("/images/sand_texture.png")));
         materialImages.put(Material.ROCK, new Image(getClass().getResourceAsStream("/images/rock_texture.png")));
         materialImages.put(Material.WATER, new Image(getClass().getResourceAsStream("/images/water_texture.png")));
-        materialImages.put(Material.FEATHER, new Image(getClass().getResourceAsStream("/images/feather_texture.jpg")));
-        materialImages.put(Material.LINE, new Image(getClass().getResourceAsStream("/images/line_texture.jpg")));
+        materialImages.put(Material.FEATHER, new Image(getClass().getResourceAsStream("/images/feather_texture.png")));
+        materialImages.put(Material.LINE, new Image(getClass().getResourceAsStream("/images/line_texture.png")));
     }
 
     public static Image getMaterialImage(Material material) {
