@@ -11,8 +11,8 @@ public abstract class SolidBlock extends Block {
         super.setStabilityFactor(new Random().nextInt(50) + 1);
     }
 
-    @Override
-    public void setDensity(double density) {
-        super.setDensity(density);
-    }
+    //@Override
+    //public void setDensity(double density) {
+      //  super.setDensity(density);
+    //}
 }

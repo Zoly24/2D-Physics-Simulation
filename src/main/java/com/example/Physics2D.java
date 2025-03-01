@@ -69,7 +69,6 @@ public class Physics2D extends Application {
                 CornerRadii.EMPTY,
                 javafx.geometry.Insets.EMPTY));
         root.setBackground(background);
-
         Block[][] grid = new Block[GRID_ROWS][GRID_COLUMNS];
 
         createGrid(root);
@@ -83,7 +82,6 @@ public class Physics2D extends Application {
             public void handle(long now) {
                 long deltaTime = now - lastTime;
                 if (deltaTime > 4166667) {
-
                     Gravity.updateGravity(root, grid, deltaTime / 1000000);
                     lastTime = now;
                     if (deltaTime / 1000000 > 32) {
@@ -144,7 +142,7 @@ public class Physics2D extends Application {
             deleteBlocks(pane, grid, gridLocationRow, gridLocationColumn);
 
         }
-        
+
     }
 
     public static boolean gridWithinBounds(int gridLocationRow, int gridLocationColumn) {
@@ -155,11 +153,13 @@ public class Physics2D extends Application {
 
     }
 
-    public static void addBlocks(Pane pane, Block[][] grid, int gridLocationRow, int gridLocationColumn, double mouseX, double mouseY) {
+    public static void addBlocks(Pane pane, Block[][] grid, int gridLocationRow, int gridLocationColumn, double mouseX,
+            double mouseY) {
         if (gridWithinBounds(gridLocationRow, gridLocationColumn)) {
             if (cursorSize > 0) {
                 for (int row = gridLocationRow + cursorSize; row >= gridLocationRow - cursorSize; row--) {
-                    for (int column = gridLocationColumn + cursorSize; column >= gridLocationColumn - cursorSize; column--) {
+                    for (int column = gridLocationColumn + cursorSize; column >= gridLocationColumn
+                            - cursorSize; column--) {
                         if (row < GRID_ROWS && row >= 0 && column < GRID_COLUMNS && column >= 0) {
                             if (grid[row][column] == null) {
                                 double placementX = column * ((double) SCREEN_WIDTH / GRID_COLUMNS);
@@ -189,7 +189,8 @@ public class Physics2D extends Application {
     public static void deleteBlocks(Pane pane, Block[][] grid, int gridLocationRow, int gridLocationColumn) {
         if (gridWithinBounds(gridLocationRow, gridLocationColumn)) {
             for (int row = gridLocationRow - cursorSize; row <= gridLocationRow + cursorSize; row++) {
-                for (int column = gridLocationColumn - cursorSize; column <= gridLocationColumn + cursorSize; column++) {
+                for (int column = gridLocationColumn - cursorSize; column <= gridLocationColumn
+                        + cursorSize; column++) {
                     if (row < GRID_ROWS && row >= 0 && column < GRID_COLUMNS && column >= 0) {
                         if (grid[row][column] != null) {
                             pane.getChildren().remove(grid[row][column].getBlockInfo());
